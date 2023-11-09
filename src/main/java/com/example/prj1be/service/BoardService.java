@@ -34,4 +34,11 @@ public class BoardService {
         }
         return true;
     }
+
+    public boolean list(Board board) {
+        if (board == null) {
+            return false;
+        }
+        return true;
+    }
 }
