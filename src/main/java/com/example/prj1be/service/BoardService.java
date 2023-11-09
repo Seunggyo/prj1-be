@@ -16,6 +16,7 @@ public class BoardService {
     }
 
     public boolean validate(Board board) {
+
         if (board == null) {
             return false;
         }
@@ -31,6 +32,6 @@ public class BoardService {
         if (board.getWriter() == null || board.getWriter().isBlank()) {
             return false;
         }
-        return false;
+        return true;
     }
 }
