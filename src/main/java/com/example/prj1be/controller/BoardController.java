@@ -2,8 +2,10 @@ package com.example.prj1be.controller;
 
 import com.example.prj1be.domain.Board;
 import com.example.prj1be.service.BoardService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,5 +29,10 @@ public class BoardController {
         } else {
             return ResponseEntity.internalServerError().build();
         }
+    }
+
+    @GetMapping("list")
+    public List<Board> list() {
+        return service.list();
     }
 }
