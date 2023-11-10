@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface BoardMapper {
@@ -35,4 +36,13 @@ public interface BoardMapper {
         WHERE id =#{id}
         """)
     int deleteById(Integer id);
+
+    @Update("""
+        UPDATE prj1.board
+        SET title =#{title},
+        content = #{content},
+        writer = #{writer}
+        WHERE id = #{id}
+        """)
+    int update(Board board);
 }
