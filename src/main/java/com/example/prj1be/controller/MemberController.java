@@ -2,6 +2,7 @@ package com.example.prj1be.controller;
 
 import com.example.prj1be.domain.Member;
 import com.example.prj1be.service.MemberService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,5 +47,10 @@ public class MemberController {
         } else {
             return ResponseEntity.ok().build();
         }
+    }
+
+    @GetMapping("list")
+    public List<Member> list() {
+        return service.list();
     }
 }

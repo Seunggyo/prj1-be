@@ -1,6 +1,7 @@
 package com.example.prj1be.mapper;
 
 import com.example.prj1be.domain.Member;
+import java.util.List;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -27,4 +28,11 @@ public interface MemberMapper {
         WHERE email = #{email}
         """)
     String selectEmail(String email);
+
+    @Select("""
+        SELECT *
+        FROM prj1.member
+        ORDER BY inserted DESC 
+        """)
+    List<Member> selectAll();
 }

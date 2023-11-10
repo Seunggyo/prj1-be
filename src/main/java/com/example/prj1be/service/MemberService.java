@@ -2,6 +2,7 @@ package com.example.prj1be.service;
 
 import com.example.prj1be.domain.Member;
 import com.example.prj1be.mapper.MemberMapper;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -37,5 +38,9 @@ public class MemberService {
             return false;
         }
         return true;
+    }
+
+    public List<Member> list() {
+        return mapper.selectAll();
     }
 }
