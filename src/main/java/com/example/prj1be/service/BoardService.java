@@ -47,4 +47,8 @@ public class BoardService {
     public boolean remove(Integer id) {
         return mapper.deleteById(id) == 1;
     }
+
+    public boolean edit(Integer id) {
+        return mapper.editById(id) == 1;
+    }
 }

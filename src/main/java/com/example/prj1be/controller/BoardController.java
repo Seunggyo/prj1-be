@@ -51,4 +51,13 @@ public class BoardController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
+    @GetMapping("edit/{id}")
+    public ResponseEntity edit(@PathVariable Integer id) {
+        if (service.edit(id)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 }
