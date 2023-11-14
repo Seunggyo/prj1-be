@@ -18,16 +18,16 @@ public interface BoardMapper {
     int insert(Board board);
 
     @Select("""
-        SELECT id,title,writer,inserted
-        FROM prj1.board 
+        SELECT b.id,b.title, m.nickName,b.writer,b.inserted
+        FROM prj1.board b join prj1.member m on m.id = b.writer
         ORDER BY id DESC 
         """)
     List<Board> selectAll();
 
     @Select("""
-        SELECT *
-        FROM prj1.board
-        WHERE id = #{id}
+        SELECT b.id,b.title,b.content,m.nickName,b.writer,b.inserted
+        FROM prj1.board b join prj1.member m on m.id = b.writer
+        WHERE b.id = #{id}
         """)
     Board selectById(Integer id);
 
