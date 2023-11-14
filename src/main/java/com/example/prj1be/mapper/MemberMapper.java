@@ -12,8 +12,8 @@ import org.apache.ibatis.annotations.Update;
 public interface MemberMapper {
 
     @Insert("""
-        INSERT INTO prj1.member(id, password, email)
-        VALUES (#{id},#{password},#{email})
+        INSERT INTO prj1.member(id, password, email, nickName)
+        VALUES (#{id},#{password},#{email}, #{nickName})
         """)
     int insert(Member member);
 
@@ -53,14 +53,22 @@ public interface MemberMapper {
 
     @Update("""
         <script>
-        UPDATE member
+        UPDATE prj1.member
         SET 
           <if test="password != ''">
           password = #{password},
           </if>
-          email = #{email}
+          email = #{email},
+          nickName = #{nickName}
         WHERE id = #{id}
         </script>
         """)
     int update(Member member);
+
+    @Select("""
+        SELECT nickName
+        FROM prj1.member
+        WHERE nickName = #{nickName}
+        """)
+    String selectNickName(String nickName);
 }

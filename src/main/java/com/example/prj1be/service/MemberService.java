@@ -65,16 +65,24 @@ public class MemberService {
 
     }
 
+    public String getNickName(String nickName) {
+        return mapper.selectNickName(nickName);
+    }
+
     public boolean login(Member member, WebRequest request) {
         Member dbMember = mapper.selectById(member.getId());
 
         if (dbMember != null) {
             if (dbMember.getPassword().equals(member.getPassword())) {
                 dbMember.setPassword("");
-                request.setAttribute("login", dbMember, RequestAttributes.SCOPE_REQUEST);
+                request.setAttribute("login", dbMember, RequestAttributes.SCOPE_SESSION);
                 return true;
             }
         }
         return false;
+    }
+
+    public boolean hasAccess(String id, Member login) {
+        return login.getId().equals(id);
     }
 }

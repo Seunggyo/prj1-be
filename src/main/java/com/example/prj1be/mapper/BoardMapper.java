@@ -19,7 +19,7 @@ public interface BoardMapper {
 
     @Select("""
         SELECT id,title,writer,inserted
-        FROM prj1.board
+        FROM prj1.board 
         ORDER BY id DESC 
         """)
     List<Board> selectAll();

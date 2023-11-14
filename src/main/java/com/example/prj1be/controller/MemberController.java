@@ -5,6 +5,7 @@ import com.example.prj1be.service.MemberService;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.context.request.WebRequest;
 
 @RestController
@@ -52,7 +54,16 @@ public class MemberController {
             return ResponseEntity.ok().build();
         }
     }
-    
+
+    @GetMapping(value = "check", params = "nickName")
+    public ResponseEntity checkNickName(String nickName) {
+        if (service.getNickName(nickName) == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok().build();
+        }
+    }
+
 
     @GetMapping("list")
     public List<Member> list() {
@@ -70,9 +81,17 @@ public class MemberController {
     }
 
     @DeleteMapping
-    public ResponseEntity delete(String id) {
+    public ResponseEntity delete(String id,
+        @SessionAttribute(value = "login", required = false) Member login) {
         // TODO : 로그인 했는 지? -> 안했으면 401
         // TODO : 자기 정보인지? -> 아니면 403
+
+        if (login == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        if (!service.hasAccess(id, login)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
 
         if (service.deleteMember(id)) {
             return ResponseEntity.ok().build();
@@ -83,9 +102,15 @@ public class MemberController {
     }
 
     @PutMapping("edit")
-    public ResponseEntity edit(@RequestBody Member member) {
+    public ResponseEntity edit(@RequestBody Member member,
+        @SessionAttribute(value = "login", required = false) Member login) {
         // TODO: 로그인 했는지? 자기정보인지?
-
+        if (login == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        if (!service.hasAccess(member.getId(), login)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         if (service.update(member)) {
             return ResponseEntity.ok().build();
         } else {
