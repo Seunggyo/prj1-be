@@ -52,6 +52,7 @@ public class MemberController {
             return ResponseEntity.ok().build();
         }
     }
+    
 
     @GetMapping("list")
     public List<Member> list() {
