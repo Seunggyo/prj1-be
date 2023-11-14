@@ -78,7 +78,7 @@ public class MemberController {
         if (login == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        if (service.hasAccess(id, login)) {
+        if (!service.hasAccess(id, login)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         Member member = service.getMember(id);
