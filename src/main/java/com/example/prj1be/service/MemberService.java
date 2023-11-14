@@ -5,6 +5,8 @@ import com.example.prj1be.mapper.MemberMapper;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.WebRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -42,5 +44,37 @@ public class MemberService {
 
     public List<Member> list() {
         return mapper.selectAll();
+    }
+
+    public boolean deleteMember(String id) {
+        return mapper.deleteById(id) == 1;
+    }
+
+    public Member getMember(String id) {
+        return mapper.selectById(id);
+    }
+
+    public boolean update(Member member) {
+//        Member oldMember = mapper.selectById(member.getId());
+//
+//        if (member.getPassword().equals("")) {
+//            member.setPassword(oldMember.getPassword());
+//        }
+
+        return mapper.update(member) == 1;
+
+    }
+
+    public boolean login(Member member, WebRequest request) {
+        Member dbMember = mapper.selectById(member.getId());
+
+        if (dbMember != null) {
+            if (dbMember.getPassword().equals(member.getPassword())) {
+                dbMember.setPassword("");
+                request.setAttribute("login", dbMember, RequestAttributes.SCOPE_REQUEST);
+                return true;
+            }
+        }
+        return false;
     }
 }
