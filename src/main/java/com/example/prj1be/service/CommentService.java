@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 public class CommentService {
 
     private final CommentMapper mapper;
+    private final MemberService memberService;
 
     public boolean add(Comment comment, Member login) {
         comment.setMemberId(login.getId());
@@ -34,5 +35,19 @@ public class CommentService {
 
     public List<Comment> list(Integer boardId) {
         return mapper.selectByBoardId(boardId);
+    }
+
+    public boolean remove(Integer id) {
+        return mapper.deleteById(id) == 1;
+    }
+
+    public boolean hasAccess(Integer id, Member login) {
+        if (memberService.isAdmin(login)) {
+            return true;
+        }
+        Comment comment = mapper.selectById(id);
+
+        return comment.getMemberId().equals(login.getId());
+
     }
 }
