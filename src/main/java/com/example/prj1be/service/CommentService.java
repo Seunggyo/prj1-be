@@ -50,4 +50,17 @@ public class CommentService {
         return mapper.update(comment) == 1;
 
     }
+
+    public boolean updateValidate(Comment comment) {
+        if (comment == null) {
+            return false;
+        }
+        if (comment.getId() == null) {
+            return false;
+        }
+        if (comment.getComment() == null || comment.getComment().isBlank()) {
+            return false;
+        }
+        return true;
+    }
 }
