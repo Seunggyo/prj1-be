@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 public class BoardService {
 
     private final BoardMapper mapper;
-    private final MemberService memberService;
     private final CommentMapper commentMapper;
 
     public boolean save(Board board, Member login) {
@@ -58,7 +57,10 @@ public class BoardService {
     }
 
     public boolean hasAccess(Integer id, Member login) {
-        if (memberService.isAdmin(login)) {
+        if (login == null) {
+            return false;
+        }
+        if (login.isAdmin()) {
             return true;
         }
         Board board = mapper.selectById(id);
