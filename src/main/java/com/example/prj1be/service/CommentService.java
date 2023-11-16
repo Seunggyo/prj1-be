@@ -45,4 +45,9 @@ public class CommentService {
 
         return comment.getMemberId().equals(login.getId());
     }
+
+    public boolean update(Comment comment) {
+        return mapper.update(comment) == 1;
+
+    }
 }
