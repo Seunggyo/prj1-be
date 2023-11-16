@@ -63,4 +63,8 @@ public class CommentService {
         }
         return true;
     }
+
+    public Comment count(Integer boardId) {
+        return mapper.count(boardId);
+    }
 }

@@ -1,8 +1,10 @@
 package com.example.prj1be.controller;
 
 import com.example.prj1be.domain.Board;
+import com.example.prj1be.domain.Comment;
 import com.example.prj1be.domain.Member;
 import com.example.prj1be.service.BoardService;
+import com.example.prj1be.service.CommentService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 public class BoardController {
 
     private final BoardService service;
+    private final CommentService commentService;
 
     @PostMapping("add")
     public ResponseEntity add(@RequestBody Board board,
@@ -91,5 +95,10 @@ public class BoardController {
         } else {
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @GetMapping("count")
+    public Comment count(@RequestParam("id") Integer boardId) {
+        return commentService.count(boardId);
     }
 }

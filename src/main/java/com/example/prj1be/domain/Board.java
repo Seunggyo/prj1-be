@@ -12,4 +12,5 @@ public class Board {
     private String writer;
     private LocalDateTime inserted;
     private String nickName;
+    private Integer count;
 }
