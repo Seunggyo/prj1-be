@@ -18,9 +18,16 @@ public interface BoardMapper {
     int insert(Board board);
 
     @Select("""
-        SELECT b.id,b.title, m.nickName,b.writer,b.inserted
+        SELECT b.id,
+               b.title,
+               m.nickName,
+               b.writer,
+               b.inserted,
+               COUNT(c.id) countComment
         FROM prj1.board b join prj1.member m on m.id = b.writer
-        ORDER BY id DESC 
+            LEFT JOIN prj1.comment c on b.id = c.boardId
+        GROUP BY b.id
+        ORDER BY id DESC
         """)
     List<Board> selectAll();
 
