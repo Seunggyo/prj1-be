@@ -23,11 +23,13 @@ public interface BoardMapper {
                m.nickName,
                b.writer,
                b.inserted,
-               COUNT(c.id) countComment
+               COUNT(DISTINCT c.id) countComment,
+               COUNT(DISTINCT bL.id)countLike
         FROM prj1.board b join prj1.member m on m.id = b.writer
             LEFT JOIN prj1.comment c on b.id = c.boardId
+            LEFT JOIN prj1.boardLike bL on b.id = bL.boardId
         GROUP BY b.id
-        ORDER BY id DESC
+        ORDER BY b.id DESC
         """)
     List<Board> selectAll();
 
