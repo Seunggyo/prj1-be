@@ -22,7 +22,7 @@ public interface BoardMapper {
                b.title,
                m.nickName,
                b.writer,
-               b.inserted,
+               b.inserted,        
                COUNT(DISTINCT c.id) countComment,
                COUNT(DISTINCT bL.id)countLike
         FROM prj1.board b join prj1.member m on m.id = b.writer
