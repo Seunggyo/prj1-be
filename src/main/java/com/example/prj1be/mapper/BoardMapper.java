@@ -67,4 +67,11 @@ public interface BoardMapper {
         WHERE writer = #{writer}
         """)
     List<Integer> selectIdListByMemberId(String writer);
+
+    @Select("""
+        SELECT boardId
+        FROM boardLike
+        WHERE memberId = #{memberId}
+        """)
+    List<Integer> selectIdListByLikeMember(String memberId);
 }
