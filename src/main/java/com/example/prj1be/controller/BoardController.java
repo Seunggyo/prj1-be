@@ -3,7 +3,7 @@ package com.example.prj1be.controller;
 import com.example.prj1be.domain.Board;
 import com.example.prj1be.domain.Member;
 import com.example.prj1be.service.BoardService;
-import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +45,7 @@ public class BoardController {
     }
 
     @GetMapping("list")
-    public List<Board> list(@RequestParam(value = "p", defaultValue = "1") Integer page) {
+    public Map<String, Object> list(@RequestParam(value = "p", defaultValue = "1") Integer page) {
 
         return service.list(page);
     }
