@@ -28,4 +28,12 @@ public interface LikeMapper {
         WHERE boardId = #{boardId}
         """)
     int countByBoardId(Integer boardId);
+
+    @Select("""
+        SELECT *
+        FROM prj1.boardLike
+        WHERE boardId =#{boardId}
+        AND memberId = #{memberId}
+        """)
+    Like seletByBoardIdAndMemberId(Integer boardId, String memberId);
 }
