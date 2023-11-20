@@ -6,6 +6,7 @@ import com.example.prj1be.mapper.BoardMapper;
 import com.example.prj1be.mapper.CommentMapper;
 import com.example.prj1be.mapper.FileMapper;
 import com.example.prj1be.mapper.LikeMapper;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -31,11 +32,31 @@ public class BoardService {
             for (int i = 0; i < files.length; i++) {
                 // boardId, name
                 fileMapper.insert(board.getId(), files[i].getOriginalFilename());
+                // 파일을 S3 bucket에 upload하기
+                // 우선 로컬에 저장
+                upload(board.getId(), files[i]);
             }
         }
-        // 파일을 S3 bucket에 upload하기
 
         return cnt == 1;
+    }
+
+    private void upload(Integer boardId, MultipartFile file) {
+        // 파일 저장 경로
+        // /Users/kim/Temp/prj1/게시물 번호/파일명
+        try {
+            File folder = new File("/Users/kim/Temp/prj1/" + boardId);
+
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+
+            String path = folder.getAbsolutePath() + "/" + file.getOriginalFilename();
+            File des = new File(path);
+            file.transferTo(des);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean validate(Board board) {
