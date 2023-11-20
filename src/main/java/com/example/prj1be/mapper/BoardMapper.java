@@ -28,11 +28,13 @@ public interface BoardMapper {
         FROM prj1.board b join prj1.member m on m.id = b.writer
             LEFT JOIN prj1.comment c on b.id = c.boardId
             LEFT JOIN prj1.boardLike bL on b.id = bL.boardId
+        WHERE b.content LIKE  #{keyword}
+        OR b.title LIKE #{keyword}
         GROUP BY b.id
         ORDER BY b.id DESC
         LIMIT #{from},10
         """)
-    List<Board> selectAll(Integer from);
+    List<Board> selectAll(Integer from, String keyword);
 
     @Select("""
         SELECT b.id,b.title,b.content,m.nickName,b.writer,b.inserted
