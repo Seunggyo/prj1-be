@@ -7,14 +7,17 @@ import com.example.prj1be.mapper.CommentMapper;
 import com.example.prj1be.mapper.FileMapper;
 import com.example.prj1be.mapper.LikeMapper;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(rollbackFor = Exception.class)
 public class BoardService {
 
     private final BoardMapper mapper;
@@ -22,7 +25,7 @@ public class BoardService {
     private final LikeMapper likeMapper;
     private final FileMapper fileMapper;
 
-    public boolean save(Board board, MultipartFile[] files, Member login) {
+    public boolean save(Board board, MultipartFile[] files, Member login) throws IOException {
         board.setWriter(login.getId());
 
         int cnt = mapper.insert(board);
@@ -41,22 +44,20 @@ public class BoardService {
         return cnt == 1;
     }
 
-    private void upload(Integer boardId, MultipartFile file) {
+    private void upload(Integer boardId, MultipartFile file) throws IOException {
         // 파일 저장 경로
         // /Users/kim/Temp/prj1/게시물 번호/파일명
-        try {
-            File folder = new File("/Users/kim/Temp/prj1/" + boardId);
 
-            if (!folder.exists()) {
-                folder.mkdirs();
-            }
+        File folder = new File("/Users/kim/Temp/prj1/" + boardId);
 
-            String path = folder.getAbsolutePath() + "/" + file.getOriginalFilename();
-            File des = new File(path);
-            file.transferTo(des);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (!folder.exists()) {
+            folder.mkdirs();
         }
+
+        String path = folder.getAbsolutePath() + "/" + file.getOriginalFilename();
+        File des = new File(path);
+        file.transferTo(des);
+
     }
 
     public boolean validate(Board board) {

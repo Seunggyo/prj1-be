@@ -3,6 +3,7 @@ package com.example.prj1be.controller;
 import com.example.prj1be.domain.Board;
 import com.example.prj1be.domain.Member;
 import com.example.prj1be.service.BoardService;
+import java.io.IOException;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ public class BoardController {
     @PostMapping("add")
     public ResponseEntity add(Board board,
         @RequestParam(value = "files[]", required = false) MultipartFile[] files,
-        @SessionAttribute(value = "login", required = false) Member login) {
+        @SessionAttribute(value = "login", required = false) Member login) throws IOException {
 
         if (login == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
