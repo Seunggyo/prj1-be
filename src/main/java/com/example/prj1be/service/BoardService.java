@@ -137,6 +137,7 @@ public class BoardService {
     }
 
     public boolean remove(Integer id) {
+        fileMapper.deleteByBoardId(id);
         // 1. 게시물에 달린 댓글 지우기
         commentMapper.deleteByBoardId(id);
 
