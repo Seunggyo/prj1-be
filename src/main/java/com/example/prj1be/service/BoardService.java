@@ -98,12 +98,12 @@ public class BoardService {
         return true;
     }
 
-    public Map<String, Object> list(Integer page, String keyword) {
+    public Map<String, Object> list(Integer page, String keyword, String category) {
         Map<String, Object> map = new HashMap<>();
         Map<String, Object> pageInfo = new HashMap<>();
 
 //        int countAll = mapper.countAll();
-        int countAll = mapper.countAll("%" + keyword + "%");
+        int countAll = mapper.countAll("%" + keyword + "%", category);
         int lastPageNumber = (countAll - 1) / 10 + 1;
         int startPageNumber = (page - 1) / 10 * 10 + 1;
         int endPageNumber = startPageNumber + 9;
@@ -121,7 +121,7 @@ public class BoardService {
             pageInfo.put("nextPageNumber", nextPageNumber);
         }
         int from = (page - 1) * 10;
-        map.put("boardList", mapper.selectAll(from, "%" + keyword + "%"));
+        map.put("boardList", mapper.selectAll(from, "%" + keyword + "%", category));
         map.put("pageInfo", pageInfo);
         return map;
     }
@@ -166,7 +166,36 @@ public class BoardService {
         fileMapper.deleteByBoardId(id);
     }
 
-    public boolean update(Board board) {
+    public boolean update(Board board, List<Integer> removeFileIds, MultipartFile[] uploadFiles)
+        throws IOException {
+        // 파일 지우기
+        // s3에서 지우기
+        if (removeFileIds != null) {
+            for (Integer id :
+                removeFileIds) {
+                BoardFile file = fileMapper.selectById(id);
+                String key = "prj1/" + board.getId() + "/" + file.getName();
+                DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()
+                    .bucket(bucket)
+                    .key(key)
+                    .build();
+                s3.deleteObject(objectRequest);
+
+                // db에서 지우기
+                fileMapper.deleteById(id);
+            }
+
+        }
+
+        // 파일 추가 하기
+        if (uploadFiles != null) {
+            for (MultipartFile file : uploadFiles) {
+                // s3에 추가하기
+                upload(board.getId(), file);
+                // db에 올리기
+                fileMapper.insert(board.getId(), file.getOriginalFilename());
+            }
+        }
         return mapper.update(board) == 1;
     }
 

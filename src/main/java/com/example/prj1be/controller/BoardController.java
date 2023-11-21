@@ -4,6 +4,7 @@ import com.example.prj1be.domain.Board;
 import com.example.prj1be.domain.Member;
 import com.example.prj1be.service.BoardService;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,9 +50,10 @@ public class BoardController {
     @GetMapping("list")
     public Map<String, Object> list(
         @RequestParam(value = "p", defaultValue = "1") Integer page,
-        @RequestParam(value = "k", defaultValue = "") String keyword) {
+        @RequestParam(value = "k", defaultValue = "") String keyword,
+        @RequestParam(value = "c", defaultValue = "all") String category) {
 
-        return service.list(page, keyword);
+        return service.list(page, keyword, category);
     }
 
     @GetMapping("id/{id}")
@@ -78,10 +79,14 @@ public class BoardController {
     }
 
     @PutMapping("edit")
-    public ResponseEntity edit(@RequestBody Board board,
-        @SessionAttribute(value = "login", required = false) Member login) {
+    public ResponseEntity edit(Board board,
+        @RequestParam(value = "removeFileIds[]", required = false) List<Integer> removeFileIds,
+        @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] uploadFiles,
+        @SessionAttribute(value = "login", required = false) Member login) throws IOException {
 //        System.out.println("board = " + board);
-
+//
+//        System.out.println("removeFileIds = " + removeFileIds);
+//        System.out.println("uploadFiles = " + uploadFiles);
         if (login == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -90,7 +95,7 @@ public class BoardController {
         }
         if (service.validate(board)) {
 
-            if (service.update(board)) {
+            if (service.update(board, removeFileIds, uploadFiles)) {
                 return ResponseEntity.ok().build();
             } else {
                 return ResponseEntity.internalServerError().build();
