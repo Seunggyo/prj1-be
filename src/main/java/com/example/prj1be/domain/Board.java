@@ -16,6 +16,7 @@ public class Board {
     private String nickName;
     private Integer countComment;
     private Integer countLike;
+    private Integer countFile;
     private List<BoardFile> files;
 
 

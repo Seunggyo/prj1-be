@@ -26,10 +26,12 @@ public interface BoardMapper {
                b.writer,
                b.inserted,        
                COUNT(DISTINCT c.id) countComment,
-               COUNT(DISTINCT bL.id)countLike
+               COUNT(DISTINCT bL.id) countLike,
+               COUNT(DISTINCT bF.id) countFile
         FROM prj1.board b join prj1.member m on m.id = b.writer
             LEFT JOIN prj1.comment c on b.id = c.boardId
             LEFT JOIN prj1.boardLike bL on b.id = bL.boardId
+            LEFT JOIN prj1.boardFile bF on b.id = bF.boardId
         WHERE b.content LIKE  #{keyword}
         OR b.title LIKE #{keyword}
         GROUP BY b.id
