@@ -79,6 +79,7 @@ public class BoardController {
 
     @PutMapping("edit")
     public ResponseEntity edit(@RequestBody Board board,
+        @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files,
         @SessionAttribute(value = "login", required = false) Member login) {
 //        System.out.println("board = " + board);
 
@@ -90,13 +91,22 @@ public class BoardController {
         }
         if (service.validate(board)) {
 
-            if (service.update(board)) {
+            if (service.update(board, files)) {
                 return ResponseEntity.ok().build();
             } else {
                 return ResponseEntity.internalServerError().build();
             }
         } else {
             return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @DeleteMapping("fileDelete/{id}")
+    public ResponseEntity<Object> fileDelete(@PathVariable Integer id) {
+        if (service.removeFile(id)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.internalServerError().build();
         }
     }
 }

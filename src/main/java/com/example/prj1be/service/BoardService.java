@@ -166,7 +166,7 @@ public class BoardService {
         fileMapper.deleteByBoardId(id);
     }
 
-    public boolean update(Board board) {
+    public boolean update(Board board, MultipartFile[] files) {
         return mapper.update(board) == 1;
     }
 
@@ -183,4 +183,16 @@ public class BoardService {
     }
 
 
+    public boolean removeFile(Integer id) {
+        String boardName = fileMapper.selectBoardName(id);
+        Integer boardId = fileMapper.selectBoardId(id);
+
+        String key = "prj1/" + boardId + "/" + boardName;
+        DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()
+            .bucket(bucket)
+            .key(key)
+            .build();
+        s3.deleteObject(objectRequest);
+        return mapper.selectByFileId(id) == 1;
+    }
 }

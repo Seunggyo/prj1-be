@@ -42,7 +42,7 @@ public interface BoardMapper {
 
     @Select("""
         SELECT b.id,b.title,b.content,m.nickName,b.writer,b.inserted
-        FROM prj1.board b join prj1.member m on m.id = b.writer
+        FROM prj1.board b join prj1.member m on m.id = b.writer 
         WHERE b.id = #{id}
         """)
     Board selectById(Integer id);
@@ -82,4 +82,10 @@ public interface BoardMapper {
         OR content LIKE #{keyword}
         """)
     int countAll(String keyword);
+
+    @Delete("""
+        DELETE FROM boardFile
+        WHERE id = #{id}
+        """)
+    int selectByFileId(Integer id);
 }
