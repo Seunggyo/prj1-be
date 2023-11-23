@@ -15,6 +15,6 @@ public class Comment {
     private String MemberNickName;
 
     public String getAgo() {
-        return AppUtil.getAgo(inserted, LocalDateTime.now());
+        return AppUtil.getAgo(inserted);
     }
 }

@@ -21,7 +21,7 @@ public class Board {
 
 
     public String getAgo() {
-        return AppUtil.getAgo(inserted, LocalDateTime.now());
+        return AppUtil.getAgo(inserted);
     }
 
 }
